@@ -10,7 +10,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9,
             button0;
-    private int num1;
+    private int num1, num2;
+    private boolean num1Set = false, num2Set = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String bText = (String) b.getText();
 
         switch (bText) {
-            case "1": ;
+            case "1":
+                setNums(1);
                 break;
         }
 
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setNums(int Num) {
-
+        if (!num1Set) {
+        }
     }
 }
