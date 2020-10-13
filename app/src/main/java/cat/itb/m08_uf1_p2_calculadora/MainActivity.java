@@ -38,9 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String bText = (String) b.getText();
 
         switch (bText) {
-            case  "1" -> System.out.println(1);
+            case "1": ;
+                break;
         }
 
+
+    }
+
+    public void setNums(int Num) {
 
     }
 }
