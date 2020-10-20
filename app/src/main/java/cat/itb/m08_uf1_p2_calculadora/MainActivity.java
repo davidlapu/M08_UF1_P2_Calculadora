@@ -11,10 +11,11 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9,
-            button0, buttonEqual, buttonPlus;
+            button0, buttonEqual, buttonPlus, buttonC;
+
     private int num1, num2, res;
     private String sNum2;
-    private boolean num1Set = false, num2Set = false;
+    private boolean completed = false;
     private EditText editText;
 
     @Override
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button8 = findViewById(R.id.button8);
         button9 = findViewById(R.id.button9);
         button0 = findViewById(R.id.button0);
+        buttonC = findViewById(R.id.buttonC);
         buttonEqual = findViewById(R.id.buttonEqual);
         buttonPlus = findViewById(R.id.buttonPlus);
 
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button7.setOnClickListener(this);
         button8.setOnClickListener(this);
         button9.setOnClickListener(this);
+        button0.setOnClickListener(this);
+        buttonC.setOnClickListener(this);
         buttonEqual.setOnClickListener(this);
         buttonPlus.setOnClickListener(this);
     }
@@ -77,6 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button b = (Button) v;
         String bText = (String) b.getText();
 
+        if (completed) {
+            clearText();
+            completed = false;
+        }
+
         switch (bText) {
 ///*            case "1":
 //            case "2":
@@ -90,20 +99,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            case "0":
             case "+" :
                 num1 = Integer.parseInt(editText.getText().toString());
-                num1Set = true;
                 break;
             case "=":
                 num2 = getNum2();
                 res = num1 + num2;
+                bText = bText.concat(String.valueOf(res));
+                completed = true;
+                break;
         }
-
 
         setText(bText);
 
+        if (bText.equals("C")) {
+            clearText();
+        }
     }
 
     @SuppressLint("SetTextI18n")
     public void setText(String num) {
         editText.setText(editText.getText() + String.valueOf(num));
     }
+
+    public void clearText() {
+        editText.setText("");
+    }
+
 }

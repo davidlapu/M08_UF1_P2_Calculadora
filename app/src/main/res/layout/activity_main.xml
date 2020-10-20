@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:inputType="none"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:textColor="@android:color/black"/>
 
 <!--    android:layout_margin="30dp"-->
 
