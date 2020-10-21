@@ -7,15 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9,
-            button0, buttonEqual, buttonPlus, buttonC;
+            button0, buttonEqual, buttonPlus, buttonMultiply, buttonBar, buttonC, buttonMinus, buttonPoint;
 
-    private int num1, num2, res;
-    private String sNum2;
-    private boolean completed = false;
+    private double num1;
+    private double num2;
+    private String res;
+    private String operador;
+    private boolean completed = false, num1Set;
     private EditText editText;
 
     @Override
@@ -37,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonC = findViewById(R.id.buttonC);
         buttonEqual = findViewById(R.id.buttonEqual);
         buttonPlus = findViewById(R.id.buttonPlus);
+        buttonMultiply = findViewById(R.id.buttonMultiply);
+        buttonBar = findViewById(R.id.buttonBar);
+        buttonMinus = findViewById(R.id.buttonMinus);
+        buttonPoint = findViewById(R.id.buttonPoint);
 
 
         button1.setOnClickListener(this);
@@ -52,9 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonC.setOnClickListener(this);
         buttonEqual.setOnClickListener(this);
         buttonPlus.setOnClickListener(this);
+        buttonMultiply.setOnClickListener(this);
+        buttonBar.setOnClickListener(this);
+        buttonMinus.setOnClickListener(this);
+        buttonPoint.setOnClickListener(this);
     }
 
-    public int getNum2() {
+    public String num2Searcher() {
         String text = editText.getText().toString(), numText="";
         boolean read = false;
 
@@ -68,12 +79,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 numText = numText.concat(String.valueOf(text.charAt(i)));
             }
 
-            if (text.charAt(i) == '+') {
+            if (text.charAt(i) == '+' || text.charAt(i) == '*' || text.charAt(i) == '-' || text.charAt(i) == '/') {
                 read = true;
             }
         }
 
-        return Integer.parseInt(numText);
+        return numText;
+    }
+
+    public boolean thereIsNum2() {
+        String numText = num2Searcher();
+        return !numText.isEmpty();
+    }
+
+    public double getNum2() {
+        String numText = num2Searcher();
+        return Double.parseDouble(numText);
     }
 
     @Override
@@ -87,32 +108,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         switch (bText) {
-///*            case "1":
-//            case "2":
-//            case "3":
-//            case "4":
-//            case "5":
-//            case "6":
-//            case "7":
-//            case "8":
-//            case "9":
-//            case "0":
+            case "C":
+                clearText();
+                bText = "";
+                break;
+            case "-" :
+            case "*" :
+            case "/" :
             case "+" :
-                num1 = Integer.parseInt(editText.getText().toString());
+                if (!isEmpty() && !num1Set) {
+                    num1 = Double.parseDouble(editText.getText().toString());
+                    num1Set = true;
+                } else {
+                    bText = "";
+                }
+
+                operador = bText;
                 break;
             case "=":
-                num2 = getNum2();
-                res = num1 + num2;
-                bText = bText.concat(String.valueOf(res));
-                completed = true;
+                if (thereIsNum2()) {
+                    res = calculator(operador, num1, getNum2());
+                    bText = bText.concat(String.valueOf(res));
+                    completed = true;
+
+                } else {
+                    bText = "";
+                }
+                num1Set = false;
                 break;
+
         }
 
         setText(bText);
 
-        if (bText.equals("C")) {
-            clearText();
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -122,6 +150,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void clearText() {
         editText.setText("");
+    }
+
+    public boolean isEmpty() {
+        return editText.getText().toString().isEmpty();
+    }
+
+    public String calculator(String operator, double num1, double num2) {
+        double res = 0;
+
+        switch (operator) {
+            case "+":
+                res = num1 + num2;
+                break;
+            case "-":
+                res = num1 - num2;
+                break;
+            case "*":
+                res = num1 * num2;
+                break;
+            case  "/":
+                if (num2 != 0) {
+                    res = num1 / num2;
+                } else {
+                    return "No se puede dividir por 0";
+                }
+
+                break;
+        }
+
+        return String.valueOf(res);
+    }
+
+    public void sout(String text) {
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 
 }
